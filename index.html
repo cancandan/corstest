@@ -1,6 +1,6 @@
 <html></html>
 <script>
-  function myfunc() {
+  function myFunction() {
 fetch(`https://api.allorigins.win/get?url=${encodeURIComponent('https://wikipedia.org')}`)
                     .then(response => {
                       if (response.ok) return response.json()
