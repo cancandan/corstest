@@ -1,54 +1,279 @@
+
 <!DOCTYPE html>
-<html lang="en">
-  <title> </title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- <link rel="stylesheet" href="https://unpkg.com/tachyons@4.12.0/css/tachyons.min.css">
-  <script src="https://unpkg.com/axios/dist/axios.min.js"></script> -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-  
-  <script>
-    var dom = new DOMParser();
-    var doc;
-    var data;
-    var retrieved;
-    
-    retrieved = NaN;
-    function functionToExecute() {
-      $.get(`https://cloudflare-cors-anywhere.cancandan.workers.dev/?${encodeURIComponent('https://www.tefas.gov.tr/FonAnaliz.aspx?FonKod=ALC')}`, function(html) { 
-        retrieved = html;
-        console.log($(retrieved).find("span#MainContent_FormViewMainIndicators_LabelFund").text());        
-      });      
-    };
+<html>
+    <head>
+        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+        <meta charset='utf-8'>
+        <title>Scraper</title>
+        <link rel="stylesheet" href="mystyle.css">
+    </head>
+    <body>
+        <button onclick="javascript:scrape()">Go</button> &nbsp;
+
+        <script>
+            var proxy = "https://cloudflare-cors-anywhere.cancandan.workers.dev/?";            
+            var mydata;            
+            var guncelKur;
+
+            var pullstring = function (s, t, u) {
+                if (!s) return ""; var m = t.length, n = s.indexOf (t) + m;
+                m = n < m ? -1 : (u ? s.indexOf (u, n) : s.length);
+                return (m < 0 ? "" : s.substr (n, m - n));
+            }
+
+            const formatDate = (date) => {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+                const day = String(date.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            };
+
+            var scrape = async () => {               
+                // {    
+                //     "name": "BITCOIN",
+                //     "alis_tarihi":"2025-01-14",
+                //     "alinan_meblag": 1000,
+                //     "alinan_meblag_cur":"$",
+                //     "alis_fiyati": 0.595303,                                                
+                //     "fetch_url":"https://www.tefas.gov.tr/FonAnaliz.aspx?FonKod=TMG",        
+                //     // -1 means dont split
+                //     "split_idx": 1, 
+                //     "split_str": 'Son Fiyat (TL)',
+                //     "fetch_start": "<span>",
+                //     "fetch_end": "</span>",
+                // }
+            
+
+                let table = document.querySelector("table").getElementsByTagName('tbody')[0];      
+
+                var currentDate = formatDate(new Date());    
+                guncelKur = await fetchit("https://www.x-rates.com/historical/?from=USD&amount=1&date="+currentDate,
+                "https://www.x-rates.com/graph/?from=USD&amp;to=TRY\'>","</a>");    
+                document.querySelector("div#dolar").innerText="Güncel Dolar Kuru: "+guncelKur+" TL";
+                guncelKur = Number(guncelKur);
+                
+                
+                aftAmt = document.querySelector("#aft_meblag").innerText;
+                aftAmt = parseFloat(aftAmt.substring(0,aftAmt.length-3).replaceAll('.',''));
+                aftBuyPrice = document.querySelector("#aft_alis_fiyati").innerText;                
+                aftBuyPrice = parseFloat(aftBuyPrice.substring(0,aftBuyPrice.length-3));
+                aftDate = document.querySelector("#aft_alis_tarihi").innerText;
+                aftAlisDolarKuru = Number(await fetchit("https://www.x-rates.com/historical/?from=USD&amount=1&date="+aftDate,
+                "https://www.x-rates.com/graph/?from=USD&amp;to=TRY\'>","</a>"));
+                aftGuncelFiyat = Number((await fetchit("https://www.tefas.gov.tr/FonAnaliz.aspx?FonKod=AFT",
+                "<span>","</span>", 1, "Son Fiyat (TL)")).replace(',', '.'));
+                aftTlGetiri = (aftAmt/aftBuyPrice)*aftGuncelFiyat - aftAmt;
+                aftDolarGetiri = (aftAmt/aftBuyPrice)*aftGuncelFiyat/guncelKur - aftAmt/aftAlisDolarKuru;
+                document.querySelector("#aft_alis_dolar_kur").innerText = aftAlisDolarKuru.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " TL";
+                document.querySelector("#aft_guncel_fiyat").innerText = aftGuncelFiyat + " TL";
+                document.querySelector("#aft_tl_getiri").innerText = aftTlGetiri.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " TL";
+                document.querySelector("#aft_dolar_getiri").innerText = aftDolarGetiri.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " $";
 
 
-  </script>
-  <style>
-    table {
-    border-collapse: collapse;
-    font-family: system-ui;
-    caption { margin-block: 1rlh; }
-    :is(td, th) {
-        border-style: solid;
-        padding: .5ch 1ch;
-    }
-    }    
-  </style>
-  <body>
-    <button onclick="functionToExecute()">Click</button>
-    <table>
-        <caption>Super Heroes</caption>
-        <colgroup><col><col><col><col></colgroup>
-        <thead>
-          <tr><th>First Name</th><th>Last Name</th><th>Known As</th><th>Place</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Bruce</td><td>Wayne</td><td>Batman</td><td>Gotham City</td></tr>
-          <tr><td>Clark</td><td>Kent</td><td>Superman</td><td>Metropolis</td></tr>
-          <tr><td>Tony</td><td>Stark</td><td>Iron Man</td><td>Malibu</td></tr>
-          <tr><td>Peter</td><td>Parker</td><td>Spider-Man</td><td>New York City</td></tr>
-          <tr><td>Matt</td><td>Murdock</td><td>Daredevil</td><td>New York City</td></tr>
-        </tbody>
-    </table>
-    <div id="dom" style="display:none"></div>
-  </body>
+                tmgAmt = document.querySelector("#tmg_meblag").innerText;
+                tmgAmt = parseFloat(tmgAmt.substring(0,tmgAmt.length-3).replaceAll('.',''));
+                tmgBuyPrice = document.querySelector("#tmg_alis_fiyati").innerText;                
+                tmgBuyPrice = parseFloat(tmgBuyPrice.substring(0,tmgBuyPrice.length-3));
+                tmgDate = document.querySelector("#tmg_alis_tarihi").innerText;
+                tmgAlisDolarKuru = Number(await fetchit("https://www.x-rates.com/historical/?from=USD&amount=1&date="+tmgDate,
+                "https://www.x-rates.com/graph/?from=USD&amp;to=TRY\'>","</a>"));
+                tmgGuncelFiyat = Number((await fetchit("https://www.tefas.gov.tr/FonAnaliz.aspx?FonKod=TMG",
+                "<span>","</span>", 1, "Son Fiyat (TL)")).replace(',', '.'));
+                tmgTlGetiri = (tmgAmt/tmgBuyPrice)*tmgGuncelFiyat - tmgAmt;
+                tmgDolarGetiri = (tmgAmt/tmgBuyPrice)*tmgGuncelFiyat/guncelKur - tmgAmt/tmgAlisDolarKuru;
+                document.querySelector("#tmg_alis_dolar_kur").innerText = tmgAlisDolarKuru.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " TL";
+                document.querySelector("#tmg_guncel_fiyat").innerText = tmgGuncelFiyat + " TL";
+                document.querySelector("#tmg_tl_getiri").innerText = tmgTlGetiri.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " TL";
+                document.querySelector("#tmg_dolar_getiri").innerText = tmgDolarGetiri.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " $";
+
+
+                btcAmt = document.querySelector("#btc_meblag").innerText;
+                btcAmt = parseFloat(btcAmt.substring(0,btcAmt.length-3).replaceAll('.',''));
+                btcBuyPrice = document.querySelector("#btc_alis_fiyati").innerText;                
+                btcBuyPrice = parseFloat(btcBuyPrice.substring(0,btcBuyPrice.length-3).replaceAll('.',''));
+                btcDate = document.querySelector("#btc_alis_tarihi").innerText;
+                btcAlisDolarKuru = Number(await fetchit("https://www.x-rates.com/historical/?from=USD&amount=1&date="+btcDate,
+                "https://www.x-rates.com/graph/?from=USD&amp;to=TRY\'>","</a>"));
+
+                
+                u = proxy + "https://api.binance.com/api/v3/avgPrice?symbol=BTCTRY";
+                resp = await fetch (u)
+                data = await resp.text();
+                btcGuncelFiyat = Number(JSON.parse(data)['price'])
+                
+                btcTlGetiri = (btcAmt/btcBuyPrice)*btcGuncelFiyat - btcAmt;
+                btcDolarGetiri = (btcAmt/btcBuyPrice)*btcGuncelFiyat/guncelKur - btcAmt/btcAlisDolarKuru;
+                document.querySelector("#btc_alis_dolar_kur").innerText = btcAlisDolarKuru.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " TL";
+                document.querySelector("#btc_guncel_fiyat").innerText = btcGuncelFiyat.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " TL";
+                document.querySelector("#btc_tl_getiri").innerText = btcTlGetiri.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " TL";
+                document.querySelector("#btc_dolar_getiri").innerText = btcDolarGetiri.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " $";
+
+
+                xrpAmt = document.querySelector("#xrp_meblag").innerText;
+                xrpAmt = parseFloat(xrpAmt.substring(0,xrpAmt.length-3).replaceAll('.',''));
+                xrpBuyPrice = document.querySelector("#xrp_alis_fiyati").innerText;                
+                xrpBuyPrice = parseFloat(xrpBuyPrice.substring(0,xrpBuyPrice.length-3).replaceAll('.',''));
+                xrpDate = document.querySelector("#xrp_alis_tarihi").innerText;
+                xrpAlisDolarKuru = Number(await fetchit("https://www.x-rates.com/historical/?from=USD&amount=1&date="+xrpDate,
+                "https://www.x-rates.com/graph/?from=USD&amp;to=TRY\'>","</a>"));
+
+                
+                u = proxy + "https://api.binance.com/api/v3/avgPrice?symbol=XRPTRY";
+                resp = await fetch (u)
+                data = await resp.text();
+                xrpGuncelFiyat = Number(JSON.parse(data)['price'])
+                
+                xrpTlGetiri = (xrpAmt/xrpBuyPrice)*xrpGuncelFiyat - xrpAmt;
+                xrpDolarGetiri = (xrpAmt/xrpBuyPrice)*xrpGuncelFiyat/guncelKur - xrpAmt/xrpAlisDolarKuru;
+                document.querySelector("#xrp_alis_dolar_kur").innerText = xrpAlisDolarKuru.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " TL";
+                document.querySelector("#xrp_guncel_fiyat").innerText = xrpGuncelFiyat.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " TL";
+                document.querySelector("#xrp_tl_getiri").innerText = xrpTlGetiri.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " TL";
+                document.querySelector("#xrp_dolar_getiri").innerText = xrpDolarGetiri.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " $";
+
+
+                iuvAmt = document.querySelector("#iuv_meblag").innerText;
+                iuvAmt = parseFloat(iuvAmt.substring(0,iuvAmt.length-2).replaceAll('.','').replaceAll(',','.'));
+                iuvBuyPrice = document.querySelector("#iuv_alis_fiyati").innerText;                
+                iuvBuyPrice = parseFloat(iuvBuyPrice.substring(0,iuvBuyPrice.length-2).replaceAll(',','.'));
+                iuvDate = document.querySelector("#iuv_alis_tarihi").innerText;
+                iuvAlisDolarKuru = Number(await fetchit("https://www.x-rates.com/historical/?from=USD&amount=1&date="+iuvDate,
+                "https://www.x-rates.com/graph/?from=USD&amp;to=TRY\'>","</a>"));
+                iuvGuncelFiyat = Number((await fetchit("https://www.isportfoy.com.tr/is-portfoy-besinci-serbest-doviz-fon-usd-usd",
+                '<span class="content">','</span>', 1, "Fon Birim Fiyatı (USD)")).replace(',', '.'));
+                //iuvTlGetiri = (iuvAmt/iuvBuyPrice)*iuvGuncelFiyat - iuvAmt;
+                iuvDolarGetiri = (iuvAmt/iuvBuyPrice)*iuvGuncelFiyat - iuvAmt;
+                //document.querySelector("#iuv_alis_dolar_kur").innerText = iuvAlisDolarKuru.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " TL";
+                document.querySelector("#iuv_guncel_fiyat").innerText = iuvGuncelFiyat + " TL";
+                //document.querySelector("#iuv_tl_getiri").innerText = iuvTlGetiri.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " TL";
+                document.querySelector("#iuv_dolar_getiri").innerText = iuvDolarGetiri.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " $";
+
+
+                //
+                
+                altinAmt = document.querySelector("#altin_meblag").innerText;
+                altinAmt = parseFloat(altinAmt.substring(0,altinAmt.length-3));
+                altinBuyPrice = document.querySelector("#altin_alis_fiyati").innerText;                
+                altinBuyPrice = parseFloat(altinBuyPrice.substring(0,altinBuyPrice.length-3).replaceAll(',',''));
+                altinDate = document.querySelector("#altin_alis_tarihi").innerText;
+                altinAlisDolarKuru = Number(await fetchit("https://www.x-rates.com/historical/?from=USD&amount=1&date="+altinDate,
+                "https://www.x-rates.com/graph/?from=USD&amp;to=TRY\'>","</a>"));
+                altinGuncelFiyat = Number((await fetchit("https://altin.doviz.com/isbankasi/gram-altin",
+                '<span data-socket-key="4-gram-altin" data-socket-attr="bid">','</span>')).replace('.', '').replace(',', '.'));
+                altinTlGetiri = altinAmt*(altinGuncelFiyat - altinBuyPrice) ;
+                altinDolarGetiri = altinAmt*altinGuncelFiyat/guncelKur - altinAmt*altinBuyPrice/altinAlisDolarKuru ;
+                document.querySelector("#altin_alis_dolar_kur").innerText = altinAlisDolarKuru.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " TL";
+                document.querySelector("#altin_guncel_fiyat").innerText = altinGuncelFiyat + " TL";
+                document.querySelector("#altin_tl_getiri").innerText = altinTlGetiri.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " TL";
+                document.querySelector("#altin_dolar_getiri").innerText = altinDolarGetiri.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " $";
+                
+            };
+
+            function insertCol(row, str) {
+                let cell = row.insertCell();
+                let text = document.createTextNode(str);            
+                cell.appendChild(text);
+            }
+
+            async function fetchit(url,start,end, splitidx=-1, splitstr) {
+                url = proxy + url;  
+                let pulledStr;      
+                try {    
+                    resp = await fetch (url); if (resp.status != 200) throw ("Http Code not 200");
+                    data = await resp.text();  
+                    if (splitidx==-1) {
+                        pulledStr = pullstring(data,start,end);
+                    } else {
+                        pulledStr = pullstring(data.split(splitstr)[splitidx],start,end)
+                    }
+                    
+                    const p = new Promise((res, rej) => {
+                    res(pulledStr);          
+                    });
+                    return p;
+                } catch {
+                    console.error(error);
+                }
+            }    
+        </script>
+        <div id="dolar"></div>
+        <table>
+            <thead>
+                <tr>
+                    <th>KIYMET</th>
+                    <th>ALINMA TARIHI</th>
+                    <th>ALINAN MEBLAG</th>
+                    <th>ALIS FIYATI</th>
+                    <th>ALINMA TARIHI $ KUR</th>
+                    <th>GUNCEL FIYATI</th>                            
+                    <th>TL GETIRI</th>
+                    <th>$ GETIRI</th>                    
+                </tr>
+            </thead>
+            <tbody>    
+                <tr>                    
+                    <td data-label="KIYMET">AFT Fonu</td>
+                    <td data-label="ALIS TARIHI" id="aft_alis_tarihi">2025-02-28</td>
+                    <td data-label="ALIS MEBLAG" id="aft_meblag">1.000.000 TL</td>
+                    <td data-label="ALIS FIYATI" id="aft_alis_fiyati">0.538211 TL</td>
+                    <td data-label="ALIS DOLAR KURU" id="aft_alis_dolar_kur"></td>
+                    <td data-label="GUNCEL FIYAT" id="aft_guncel_fiyat"></td>
+                    <td data-label="TL GETIRI" id="aft_tl_getiri"></td>
+                    <td data-label="DOLAR GETIRI" id="aft_dolar_getiri"></td>                  
+                </tr>  
+                <tr>
+                    <td data-label="KIYMET">TMG Fonu</td>
+                    <td data-label="ALIS TARIHI" id="tmg_alis_tarihi">2024-02-24</td>
+                    <td data-label="ALIS MEBLAG" id="tmg_meblag">309.557 TL</td>
+                    <td data-label="ALIS FIYATI" id="tmg_alis_fiyati">0.595303 TL</td>
+                    <td data-label="ALIS DOLAR KURU" id="tmg_alis_dolar_kur"></td>
+                    <td data-label="GUNCEL FIYAT" id="tmg_guncel_fiyat"></td>
+                    <td data-label="TL GETIRI" id="tmg_tl_getiri"></td>
+                    <td data-label="DOLAR GETIRI" id="tmg_dolar_getiri"></td>                    
+                </tr>
+                <tr>
+                    <td data-label="KIYMET">BITCOIN</td>
+                    <td data-label="ALIS TARIHI" id="btc_alis_tarihi">2025-01-14</td>
+                    <td data-label="ALIS MEBLAG" id="btc_meblag">35.135 TL</td>
+                    <td data-label="ALIS FIYATI" id="btc_alis_fiyati">3.421.145 TL</td>
+                    <td data-label="ALIS DOLAR KURU" id="btc_alis_dolar_kur"></td>
+                    <td data-label="GUNCEL FIYAT" id="btc_guncel_fiyat"></td>
+                    <td data-label="TL GETIRI" id="btc_tl_getiri"></td>
+                    <td data-label="DOLAR GETIRI" id="btc_dolar_getiri"></td>                    
+                </tr>
+                <tr>
+                    <td data-label="KIYMET">XRP</td>
+                    <td data-label="ALIS TARIHI" id="xrp_alis_tarihi">2025-01-16</td>
+                    <td data-label="ALIS MEBLAG" id="xrp_meblag">35.060 TL</td>
+                    <td data-label="ALIS FIYATI" id="xrp_alis_fiyati">112,37221154 TL</td>
+                    <td data-label="ALIS DOLAR KURU" id="xrp_alis_dolar_kur"></td>
+                    <td data-label="GUNCEL FIYAT" id="xrp_guncel_fiyat"></td>
+                    <td data-label="TL GETIRI" id="xrp_tl_getiri"></td>
+                    <td data-label="DOLAR GETIRI" id="xrp_dolar_getiri"></td>                    
+                </tr>
+
+
+                <tr>
+                    <td data-label="KIYMET">IUV Fonu</td>
+                    <td data-label="ALIS TARIHI" id="iuv_alis_tarihi">2025-03-04</td>
+                    <td data-label="ALIS MEBLAG" id="iuv_meblag">2.691,69 $</td>
+                    <td data-label="ALIS FIYATI" id="iuv_alis_fiyati">1,249623 $</td>
+                    <td data-label="ALIS DOLAR KURU" id="iuv_alis_dolar_kur"></td>
+                    <td data-label="GUNCEL FIYAT" id="iuv_guncel_fiyat"></td>
+                    <td data-label="TL GETIRI" id="iuv_tl_getiri"></td>
+                    <td data-label="DOLAR GETIRI" id="iuv_dolar_getiri"></td>                    
+                </tr>
+
+                <tr>
+                    <td data-label="KIYMET">ALTIN GR</td>
+                    <td data-label="ALIS TARIHI" id="altin_alis_tarihi">2025-02-25</td>
+                    <td data-label="ALIS MEBLAG" id="altin_meblag">45.9 GR</td>
+                    <td data-label="ALIS FIYATI" id="altin_alis_fiyati">3,267.90 TL</td>
+                    <td data-label="ALIS DOLAR KURU" id="altin_alis_dolar_kur"></td>
+                    <td data-label="GUNCEL FIYAT" id="altin_guncel_fiyat"></td>
+                    <td data-label="TL GETIRI" id="altin_tl_getiri"></td>
+                    <td data-label="DOLAR GETIRI" id="altin_dolar_getiri"></td>                    
+                </tr>
+            </tbody>
+        </table>
+    </body>
 </html>
