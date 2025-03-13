@@ -52,7 +52,9 @@
                 if (guncelKur=='') {
                     dummy = new Date(currentDate);
                     dummy.setDate(dummy.getDate() - 1);
-                    currentDate = dummy.toISOString().split('T')[0]
+                    currentDate = dummy.toISOString().split('T')[0];
+                    guncelKur = await fetchit("https://www.x-rates.com/historical/?from=USD&amount=1&date="+currentDate,
+                "https://www.x-rates.com/graph/?from=USD&amp;to=TRY\'>","</a>");    
                 }
                 document.querySelector("div#dolar").innerText="Güncel Dolar Kuru: "+guncelKur+" TL";
                 guncelKur = Number(guncelKur);
