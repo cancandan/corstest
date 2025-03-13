@@ -28,22 +28,7 @@
                 return `${year}-${month}-${day}`;
             };
 
-            var scrape = async () => {               
-                // {    
-                //     "name": "BITCOIN",
-                //     "alis_tarihi":"2025-01-14",
-                //     "alinan_meblag": 1000,
-                //     "alinan_meblag_cur":"$",
-                //     "alis_fiyati": 0.595303,                                                
-                //     "fetch_url":"https://www.tefas.gov.tr/FonAnaliz.aspx?FonKod=TMG",        
-                //     // -1 means dont split
-                //     "split_idx": 1, 
-                //     "split_str": 'Son Fiyat (TL)',
-                //     "fetch_start": "<span>",
-                //     "fetch_end": "</span>",
-                // }
-            
-
+            var scrape = async () => {                    
                 let table = document.querySelector("table").getElementsByTagName('tbody')[0];      
 
                 var currentDate = formatDate(new Date());    
@@ -153,10 +138,7 @@
                 document.querySelector("#iuv_guncel_fiyat").innerText = iuvGuncelFiyat + " TL";
                 //document.querySelector("#iuv_tl_getiri").innerText = iuvTlGetiri.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " TL";
                 document.querySelector("#iuv_dolar_getiri").innerText = iuvDolarGetiri.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " $";
-
-
-                //
-                
+                        
                 altinAmt = document.querySelector("#altin_meblag").innerText;
                 altinAmt = parseFloat(altinAmt.substring(0,altinAmt.length-3));
                 altinBuyPrice = document.querySelector("#altin_alis_fiyati").innerText;                
