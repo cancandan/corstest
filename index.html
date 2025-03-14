@@ -56,8 +56,9 @@
                 "<span>","</span>", 1, "Son Fiyat (TL)")).replace(',', '.'));
                 aftTlGetiri = (aftAmt/aftBuyPrice)*aftGuncelFiyat - aftAmt;
                 aftDolarGetiri = (aftAmt/aftBuyPrice)*aftGuncelFiyat/guncelKur - aftAmt/aftAlisDolarKuru;
+                document.querySelector("#aft_alis_fiyati").innerText = aftBuyPrice.toLocaleString('tr-TR', {maximumFractionDigits:4}) + " TL";
                 document.querySelector("#aft_alis_dolar_kur").innerText = aftAlisDolarKuru.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " TL";
-                document.querySelector("#aft_guncel_fiyat").innerText = aftGuncelFiyat + " TL";
+                document.querySelector("#aft_guncel_fiyat").innerText = aftGuncelFiyat.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " TL";
                 document.querySelector("#aft_tl_getiri").innerText = aftTlGetiri.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " TL";
                 document.querySelector("#aft_dolar_getiri").innerText = aftDolarGetiri.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " $";
 
@@ -72,8 +73,9 @@
                 "<span>","</span>", 1, "Son Fiyat (TL)")).replace(',', '.'));
                 tmgTlGetiri = (tmgAmt/tmgBuyPrice)*tmgGuncelFiyat - tmgAmt;
                 tmgDolarGetiri = (tmgAmt/tmgBuyPrice)*tmgGuncelFiyat/guncelKur - tmgAmt/tmgAlisDolarKuru;
+                document.querySelector("#tmg_alis_fiyati").innerText = tmgBuyPrice.toLocaleString('tr-TR', {maximumFractionDigits:4}) + " TL";
                 document.querySelector("#tmg_alis_dolar_kur").innerText = tmgAlisDolarKuru.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " TL";
-                document.querySelector("#tmg_guncel_fiyat").innerText = tmgGuncelFiyat + " TL";
+                document.querySelector("#tmg_guncel_fiyat").innerText = tmgGuncelFiyat.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " TL";
                 document.querySelector("#tmg_tl_getiri").innerText = tmgTlGetiri.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " TL";
                 document.querySelector("#tmg_dolar_getiri").innerText = tmgDolarGetiri.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " $";
 
@@ -93,6 +95,7 @@
                 
                 btcTlGetiri = (btcAmt/btcBuyPrice)*btcGuncelFiyat - btcAmt;
                 btcDolarGetiri = (btcAmt/btcBuyPrice)*btcGuncelFiyat/guncelKur - btcAmt/btcAlisDolarKuru;
+                document.querySelector("#btc_alis_fiyati").innerText = btcBuyPrice.toLocaleString('tr-TR', {maximumFractionDigits:4}) + " TL";
                 document.querySelector("#btc_alis_dolar_kur").innerText = btcAlisDolarKuru.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " TL";
                 document.querySelector("#btc_guncel_fiyat").innerText = btcGuncelFiyat.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " TL";
                 document.querySelector("#btc_tl_getiri").innerText = btcTlGetiri.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " TL";
@@ -114,6 +117,7 @@
                 
                 xrpTlGetiri = (xrpAmt/xrpBuyPrice)*xrpGuncelFiyat - xrpAmt;
                 xrpDolarGetiri = (xrpAmt/xrpBuyPrice)*xrpGuncelFiyat/guncelKur - xrpAmt/xrpAlisDolarKuru;
+                document.querySelector("#xrp_alis_fiyati").innerText = xrpBuyPrice.toLocaleString('tr-TR', {maximumFractionDigits:4}) + " TL";
                 document.querySelector("#xrp_alis_dolar_kur").innerText = xrpAlisDolarKuru.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " TL";
                 document.querySelector("#xrp_guncel_fiyat").innerText = xrpGuncelFiyat.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " TL";
                 document.querySelector("#xrp_tl_getiri").innerText = xrpTlGetiri.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " TL";
@@ -131,7 +135,7 @@
                 //iuvTlGetiri = (iuvAmt/iuvBuyPrice)*iuvGuncelFiyat - iuvAmt;
                 iuvDolarGetiri = (iuvAmt/iuvBuyPrice)*iuvGuncelFiyat - iuvAmt;
                 //document.querySelector("#iuv_alis_dolar_kur").innerText = iuvAlisDolarKuru.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " TL";
-                document.querySelector("#iuv_guncel_fiyat").innerText = iuvGuncelFiyat + " TL";
+                document.querySelector("#iuv_guncel_fiyat").innerText = iuvGuncelFiyat.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " TL";
                 //document.querySelector("#iuv_tl_getiri").innerText = iuvTlGetiri.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " TL";
                 document.querySelector("#iuv_dolar_getiri").innerText = iuvDolarGetiri.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " $";
                         
@@ -145,10 +149,75 @@
                 '<span data-socket-key="4-gram-altin" data-socket-attr="bid">','</span>')).replace('.', '').replace(',', '.'));
                 altinTlGetiri = altinAmt*(altinGuncelFiyat - altinBuyPrice) ;
                 altinDolarGetiri = altinAmt*altinGuncelFiyat/guncelKur - altinAmt*altinBuyPrice/altinAlisDolarKuru ;
+                document.querySelector("#altin_meblag").innerText = altinAmt.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " GR";
                 document.querySelector("#altin_alis_dolar_kur").innerText = altinAlisDolarKuru.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " TL";
-                document.querySelector("#altin_guncel_fiyat").innerText = altinGuncelFiyat + " TL";
+                document.querySelector("#altin_guncel_fiyat").innerText = altinGuncelFiyat.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " TL";
                 document.querySelector("#altin_tl_getiri").innerText = altinTlGetiri.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " TL";
                 document.querySelector("#altin_dolar_getiri").innerText = altinDolarGetiri.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " $";
+
+
+                /// altin 1
+                altin1Amt = document.querySelector("#altin1_meblag").innerText;
+                altin1Amt = parseFloat(altin1Amt.substring(0,altin1Amt.length-3));
+                altin1BuyPrice = document.querySelector("#altin1_alis_fiyati").innerText;                
+                altin1BuyPrice = parseFloat(altin1BuyPrice.substring(0,altin1BuyPrice.length-3).replaceAll(',',''));
+                altin1Date = document.querySelector("#altin1_alis_tarihi").innerText;
+
+                altin1AlisDolarKuru = Number(await fetchit(currencySite+altin1Date,currencySiteFrom,currencySiteTo));
+                
+                resp = await fetch(proxy+"https://bigpara.hurriyet.com.tr/altin/gram-altin-fiyati");                
+                data = await resp.text();
+                val = data.split('<span class="text">ALIŞ(TL)</span>')[1].split("</span>")[0].split(">")[1];
+                altin1GuncelFiyat = Number(val.replaceAll('.','').replaceAll(',','.'));
+                
+                altin1TlGetiri = altin1Amt*(altin1GuncelFiyat - altin1BuyPrice) ;
+                altin1DolarGetiri = altin1Amt*altin1GuncelFiyat/guncelKur - altin1Amt*altin1BuyPrice/altin1AlisDolarKuru ;
+                document.querySelector("#altin1_alis_dolar_kur").innerText = altin1AlisDolarKuru.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " TL";
+                document.querySelector("#altin1_guncel_fiyat").innerText = altin1GuncelFiyat.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " TL";
+                document.querySelector("#altin1_tl_getiri").innerText = altin1TlGetiri.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " TL";
+                document.querySelector("#altin1_dolar_getiri").innerText = altin1DolarGetiri.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " $";
+
+                /// altin 2
+                altin2Amt = document.querySelector("#altin2_meblag").innerText;
+                altin2Amt = parseFloat(altin2Amt.substring(0,altin2Amt.length-3));
+                altin2BuyPrice = document.querySelector("#altin2_alis_fiyati").innerText;                
+                altin2BuyPrice = parseFloat(altin2BuyPrice.substring(0,altin2BuyPrice.length-3).replaceAll(',',''));
+                altin2Date = document.querySelector("#altin2_alis_tarihi").innerText;
+
+                altin2AlisDolarKuru = Number(await fetchit(currencySite+altin2Date,currencySiteFrom,currencySiteTo));
+                
+                resp = await fetch(proxy+"https://bigpara.hurriyet.com.tr/altin/gram-altin-fiyati");                
+                data = await resp.text();
+                val = data.split('<span class="text">ALIŞ(TL)</span>')[1].split("</span>")[0].split(">")[1];
+                altin2GuncelFiyat = Number(val.replaceAll('.','').replaceAll(',','.'));
+                
+                altin2TlGetiri = altin2Amt*(altin2GuncelFiyat - altin2BuyPrice) ;
+                altin2DolarGetiri = altin2Amt*altin2GuncelFiyat/guncelKur - altin2Amt*altin2BuyPrice/altin2AlisDolarKuru ;
+                document.querySelector("#altin2_alis_dolar_kur").innerText = altin2AlisDolarKuru.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " TL";
+                document.querySelector("#altin2_guncel_fiyat").innerText = altin2GuncelFiyat.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " TL";
+                document.querySelector("#altin2_tl_getiri").innerText = altin2TlGetiri.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " TL";
+                document.querySelector("#altin2_dolar_getiri").innerText = altin2DolarGetiri.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " $";
+
+                /// altin 3
+                altin3Amt = document.querySelector("#altin3_meblag").innerText;
+                altin3Amt = parseFloat(altin3Amt.substring(0,altin3Amt.length-3));
+                altin3BuyPrice = document.querySelector("#altin3_alis_fiyati").innerText;                
+                altin3BuyPrice = parseFloat(altin3BuyPrice.substring(0,altin3BuyPrice.length-3).replaceAll(',',''));
+                altin3Date = document.querySelector("#altin3_alis_tarihi").innerText;
+
+                altin3AlisDolarKuru = Number(await fetchit(currencySite+altin3Date,currencySiteFrom,currencySiteTo));
+                
+                resp = await fetch(proxy+"https://bigpara.hurriyet.com.tr/altin/gram-altin-fiyati");                
+                data = await resp.text();
+                val = data.split('<span class="text">ALIŞ(TL)</span>')[1].split("</span>")[0].split(">")[1];
+                altin3GuncelFiyat = Number(val.replaceAll('.','').replaceAll(',','.'));
+                
+                altin3TlGetiri = altin3Amt*(altin3GuncelFiyat - altin3BuyPrice) ;
+                altin3DolarGetiri = altin3Amt*altin3GuncelFiyat/guncelKur - altin3Amt*altin3BuyPrice/altin3AlisDolarKuru ;
+                document.querySelector("#altin3_alis_dolar_kur").innerText = altin3AlisDolarKuru.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " TL";
+                document.querySelector("#altin3_guncel_fiyat").innerText = altin3GuncelFiyat.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " TL";
+                document.querySelector("#altin3_tl_getiri").innerText = altin3TlGetiri.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " TL";
+                document.querySelector("#altin3_dolar_getiri").innerText = altin3DolarGetiri.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " $";
                 
             };
 
@@ -248,7 +317,7 @@
                 </tr>
 
                 <tr>
-                    <td data-label="KIYMET">ALTIN GR</td>
+                    <td data-label="KIYMET">ALTIN GR ISBANK</td>
                     <td data-label="ALIS TARIHI" id="altin_alis_tarihi">2025-02-25</td>
                     <td data-label="ALIS MEBLAG" id="altin_meblag">45.9 GR</td>
                     <td data-label="ALIS FIYATI" id="altin_alis_fiyati">3,267.90 TL</td>
@@ -256,6 +325,40 @@
                     <td data-label="GUNCEL FIYAT" id="altin_guncel_fiyat"></td>
                     <td data-label="TL GETIRI" id="altin_tl_getiri"></td>
                     <td data-label="DOLAR GETIRI" id="altin_dolar_getiri"></td>                    
+                </tr>
+
+
+                <tr>
+                    <td data-label="KIYMET">ALTIN GR</td>
+                    <td data-label="ALIS TARIHI" id="altin1_alis_tarihi">2025-02-27</td>
+                    <td data-label="ALIS MEBLAG" id="altin1_meblag">576 GR</td>
+                    <td data-label="ALIS FIYATI" id="altin1_alis_fiyati">3,470 TL</td>
+                    <td data-label="ALIS DOLAR KURU" id="altin1_alis_dolar_kur"></td>
+                    <td data-label="GUNCEL FIYAT" id="altin1_guncel_fiyat"></td>
+                    <td data-label="TL GETIRI" id="altin1_tl_getiri"></td>
+                    <td data-label="DOLAR GETIRI" id="altin1_dolar_getiri"></td>                    
+                </tr>
+
+                <tr>
+                    <td data-label="KIYMET">ALTIN GR</td>
+                    <td data-label="ALIS TARIHI" id="altin2_alis_tarihi">2025-02-26</td>
+                    <td data-label="ALIS MEBLAG" id="altin2_meblag">382 GR</td>
+                    <td data-label="ALIS FIYATI" id="altin2_alis_fiyati">3,510 TL</td>
+                    <td data-label="ALIS DOLAR KURU" id="altin2_alis_dolar_kur"></td>
+                    <td data-label="GUNCEL FIYAT" id="altin2_guncel_fiyat"></td>
+                    <td data-label="TL GETIRI" id="altin2_tl_getiri"></td>
+                    <td data-label="DOLAR GETIRI" id="altin2_dolar_getiri"></td>                    
+                </tr>
+
+                <tr>
+                    <td data-label="KIYMET">ALTIN GR</td>
+                    <td data-label="ALIS TARIHI" id="altin3_alis_tarihi">2025-01-24</td>
+                    <td data-label="ALIS MEBLAG" id="altin3_meblag">22 GR</td>
+                    <td data-label="ALIS FIYATI" id="altin3_alis_fiyati">3,240 TL</td>
+                    <td data-label="ALIS DOLAR KURU" id="altin3_alis_dolar_kur"></td>
+                    <td data-label="GUNCEL FIYAT" id="altin3_guncel_fiyat"></td>
+                    <td data-label="TL GETIRI" id="altin3_tl_getiri"></td>
+                    <td data-label="DOLAR GETIRI" id="altin3_dolar_getiri"></td>                    
                 </tr>
             </tbody>
         </table>
