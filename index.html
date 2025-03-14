@@ -11,7 +11,10 @@
         
 
         <script>
-            var proxy = "https://cloudflare-cors-anywhere.cancandan.workers.dev/?";            
+            var proxy = "https://cloudflare-cors-anywhere.cancandan.workers.dev/?"; 
+            var currencySite = "https://www.x-rates.com/historical/?from=USD&amount=1&full=1&date=";
+            var currencySiteFrom = "https://www.x-rates.com/graph/?from=USD&amp;to=TRY\'>";
+            var currencySiteTo = "</a>";
             var mydata;            
             var guncelKur;
 
@@ -32,14 +35,12 @@
                 let table = document.querySelector("table").getElementsByTagName('tbody')[0];      
 
                 var currentDate = formatDate(new Date());    
-                guncelKur = await fetchit("https://www.x-rates.com/historical/?from=USD&amount=1&date="+currentDate,
-                "https://www.x-rates.com/graph/?from=USD&amp;to=TRY\'>","</a>");    
+                guncelKur = await fetchit(currencySite+currentDate,currencySiteFrom,currencySiteTo);    
                 if (guncelKur=='') {
                     dummy = new Date(currentDate);
                     dummy.setDate(dummy.getDate() - 1);
                     currentDate = dummy.toISOString().split('T')[0];
-                    guncelKur = await fetchit("https://www.x-rates.com/historical/?from=USD&amount=1&date="+currentDate,
-                "https://www.x-rates.com/graph/?from=USD&amp;to=TRY\'>","</a>");    
+                    guncelKur = await fetchit(currencySite+currentDate,currencySiteFrom,currencySiteTo);    
                 }
                 document.querySelector("div#dolar").innerText="Güncel Dolar Kuru: "+guncelKur+" TL";
                 guncelKur = Number(guncelKur);
@@ -50,8 +51,7 @@
                 aftBuyPrice = document.querySelector("#aft_alis_fiyati").innerText;                
                 aftBuyPrice = parseFloat(aftBuyPrice.substring(0,aftBuyPrice.length-3));
                 aftDate = document.querySelector("#aft_alis_tarihi").innerText;
-                aftAlisDolarKuru = Number(await fetchit("https://www.x-rates.com/historical/?from=USD&amount=1&date="+aftDate,
-                "https://www.x-rates.com/graph/?from=USD&amp;to=TRY\'>","</a>"));
+                aftAlisDolarKuru = Number(await fetchit(currencySite+aftDate,currencySiteFrom,currencySiteTo));
                 aftGuncelFiyat = Number((await fetchit("https://www.tefas.gov.tr/FonAnaliz.aspx?FonKod=AFT",
                 "<span>","</span>", 1, "Son Fiyat (TL)")).replace(',', '.'));
                 aftTlGetiri = (aftAmt/aftBuyPrice)*aftGuncelFiyat - aftAmt;
@@ -67,8 +67,7 @@
                 tmgBuyPrice = document.querySelector("#tmg_alis_fiyati").innerText;                
                 tmgBuyPrice = parseFloat(tmgBuyPrice.substring(0,tmgBuyPrice.length-3));
                 tmgDate = document.querySelector("#tmg_alis_tarihi").innerText;
-                tmgAlisDolarKuru = Number(await fetchit("https://www.x-rates.com/historical/?from=USD&amount=1&date="+tmgDate,
-                "https://www.x-rates.com/graph/?from=USD&amp;to=TRY\'>","</a>"));
+                tmgAlisDolarKuru = Number(await fetchit(currencySite+tmgDate,currencySiteFrom,currencySiteTo));
                 tmgGuncelFiyat = Number((await fetchit("https://www.tefas.gov.tr/FonAnaliz.aspx?FonKod=TMG",
                 "<span>","</span>", 1, "Son Fiyat (TL)")).replace(',', '.'));
                 tmgTlGetiri = (tmgAmt/tmgBuyPrice)*tmgGuncelFiyat - tmgAmt;
@@ -84,8 +83,7 @@
                 btcBuyPrice = document.querySelector("#btc_alis_fiyati").innerText;                
                 btcBuyPrice = parseFloat(btcBuyPrice.substring(0,btcBuyPrice.length-3).replaceAll('.',''));
                 btcDate = document.querySelector("#btc_alis_tarihi").innerText;
-                btcAlisDolarKuru = Number(await fetchit("https://www.x-rates.com/historical/?from=USD&amount=1&date="+btcDate,
-                "https://www.x-rates.com/graph/?from=USD&amp;to=TRY\'>","</a>"));
+                btcAlisDolarKuru = Number(await fetchit(currencySite+btcDate,currencySiteFrom,currencySiteTo));
 
                 
                 u = proxy + "https://api.binance.com/api/v3/avgPrice?symbol=BTCTRY";
@@ -106,8 +104,7 @@
                 xrpBuyPrice = document.querySelector("#xrp_alis_fiyati").innerText;                
                 xrpBuyPrice = parseFloat(xrpBuyPrice.substring(0,xrpBuyPrice.length-3).replaceAll('.',''));
                 xrpDate = document.querySelector("#xrp_alis_tarihi").innerText;
-                xrpAlisDolarKuru = Number(await fetchit("https://www.x-rates.com/historical/?from=USD&amount=1&date="+xrpDate,
-                "https://www.x-rates.com/graph/?from=USD&amp;to=TRY\'>","</a>"));
+                xrpAlisDolarKuru = Number(await fetchit(currencySite+xrpDate,currencySiteFrom,currencySiteTo));
 
                 
                 u = proxy + "https://api.binance.com/api/v3/avgPrice?symbol=XRPTRY";
@@ -128,8 +125,7 @@
                 iuvBuyPrice = document.querySelector("#iuv_alis_fiyati").innerText;                
                 iuvBuyPrice = parseFloat(iuvBuyPrice.substring(0,iuvBuyPrice.length-2).replaceAll(',','.'));
                 iuvDate = document.querySelector("#iuv_alis_tarihi").innerText;
-                iuvAlisDolarKuru = Number(await fetchit("https://www.x-rates.com/historical/?from=USD&amount=1&date="+iuvDate,
-                "https://www.x-rates.com/graph/?from=USD&amp;to=TRY\'>","</a>"));
+                iuvAlisDolarKuru = Number(await fetchit(currencySite+iuvDate,currencySiteFrom,currencySiteTo));
                 iuvGuncelFiyat = Number((await fetchit("https://www.isportfoy.com.tr/is-portfoy-besinci-serbest-doviz-fon-usd-usd",
                 '<span class="content">','</span>', 1, "Fon Birim Fiyatı (USD)")).replace(',', '.'));
                 //iuvTlGetiri = (iuvAmt/iuvBuyPrice)*iuvGuncelFiyat - iuvAmt;
@@ -144,8 +140,7 @@
                 altinBuyPrice = document.querySelector("#altin_alis_fiyati").innerText;                
                 altinBuyPrice = parseFloat(altinBuyPrice.substring(0,altinBuyPrice.length-3).replaceAll(',',''));
                 altinDate = document.querySelector("#altin_alis_tarihi").innerText;
-                altinAlisDolarKuru = Number(await fetchit("https://www.x-rates.com/historical/?from=USD&amount=1&date="+altinDate,
-                "https://www.x-rates.com/graph/?from=USD&amp;to=TRY\'>","</a>"));
+                altinAlisDolarKuru = Number(await fetchit(currencySite+altinDate,currencySiteFrom,currencySiteTo));
                 altinGuncelFiyat = Number((await fetchit("https://altin.doviz.com/isbankasi/gram-altin",
                 '<span data-socket-key="4-gram-altin" data-socket-attr="bid">','</span>')).replace('.', '').replace(',', '.'));
                 altinTlGetiri = altinAmt*(altinGuncelFiyat - altinBuyPrice) ;
