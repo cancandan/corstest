@@ -105,7 +105,7 @@
                 xrpAmt = document.querySelector("#xrp_meblag").innerText;
                 xrpAmt = parseFloat(xrpAmt.substring(0,xrpAmt.length-3).replaceAll('.',''));
                 xrpBuyPrice = document.querySelector("#xrp_alis_fiyati").innerText;                
-                xrpBuyPrice = parseFloat(xrpBuyPrice.substring(0,xrpBuyPrice.length-3).replaceAll('.',''));
+                xrpBuyPrice = parseFloat(xrpBuyPrice.substring(0,xrpBuyPrice.length-3).replaceAll(',','.'));
                 xrpDate = document.querySelector("#xrp_alis_tarihi").innerText;
                 xrpAlisDolarKuru = Number(await fetchit(currencySite+xrpDate,currencySiteFrom,currencySiteTo));
 
@@ -135,6 +135,7 @@
                 //iuvTlGetiri = (iuvAmt/iuvBuyPrice)*iuvGuncelFiyat - iuvAmt;
                 iuvDolarGetiri = (iuvAmt/iuvBuyPrice)*iuvGuncelFiyat - iuvAmt;
                 //document.querySelector("#iuv_alis_dolar_kur").innerText = iuvAlisDolarKuru.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " TL";
+                document.querySelector("#iuv_alis_fiyati").innerText=iuvBuyPrice.toLocaleString('tr-TR', {maximumFractionDigits:4}) + " $";
                 document.querySelector("#iuv_guncel_fiyat").innerText = iuvGuncelFiyat.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " TL";
                 //document.querySelector("#iuv_tl_getiri").innerText = iuvTlGetiri.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " TL";
                 document.querySelector("#iuv_dolar_getiri").innerText = iuvDolarGetiri.toLocaleString('tr-TR', {maximumFractionDigits:2}) + " $";
